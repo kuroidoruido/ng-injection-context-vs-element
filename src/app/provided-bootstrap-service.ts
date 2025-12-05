@@ -1,4 +1,5 @@
-import { Injectable, OnDestroy, signal } from "@angular/core";
+import { Injectable, signal } from "@angular/core";
+import { NeedToBeResetOnWeboDestroy } from "./webco-lifecycle-hack-service";
 
 export interface MyEvent {
     id: string;
@@ -6,7 +7,7 @@ export interface MyEvent {
 }
 
 @Injectable()
-export class ProvidedBootstrapService implements OnDestroy {
+export class ProvidedBootstrapService implements NeedToBeResetOnWeboDestroy {
     public readonly events = signal<MyEvent[]>([]);
 
     constructor() {
@@ -17,7 +18,8 @@ export class ProvidedBootstrapService implements OnDestroy {
         this.events.update(actual => [...actual, { id: crypto.randomUUID(), message }]);
     }
 
-    ngOnDestroy(): void {
+    resetOnWebcoDetroy(): void {
         console.log(`${ProvidedBootstrapService.name} is dying...`);
+        this.events.set([]);
     }
 }

@@ -5,6 +5,7 @@ import { ProvidedWebcoService } from "./provided-webco-service";
 import { ProvidedBootstrapService } from "./provided-bootstrap-service";
 import { AnotherService } from "./another-service";
 import { FirstService } from "./first-service";
+import { WebcomponentLifecycleHackService } from "./webco-lifecycle-hack-service";
 
 
 @Component({
@@ -64,7 +65,7 @@ export class ProvidedBootstrapEvents {
 @Component({
     selector: 'my-webco',
     imports: [RootEvents, PlatformEvents, ProvidedWebcoEvents, ProvidedBootstrapEvents],
-    providers: [ProvidedWebcoService, FirstService, AnotherService],
+    providers: [ProvidedWebcoService, FirstService, AnotherService, WebcomponentLifecycleHackService],
     template: `
         <h1>I am a webco! [{{id()}}]</h1>
         <app-root-events />
@@ -77,6 +78,7 @@ export class ProvidedBootstrapEvents {
 export class Webco implements OnDestroy {
     id = signal<number>(++(window as any).webcoCounter);
     firstService = inject(FirstService);
+    webcoLifecycleHack = inject(WebcomponentLifecycleHackService);
 
     constructor() {
         const msg = `${Webco.name} ${this.id()} I'm alive! 😈`;
@@ -86,6 +88,7 @@ export class Webco implements OnDestroy {
     ngOnDestroy(): void {
         const msg = `${Webco.name} ${this.id()} I'm dying... 💀`;
         this.push(msg);
+        this.webcoLifecycleHack.destroy();
     }
 
     private push(msg: string) {
