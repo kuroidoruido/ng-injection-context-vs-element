@@ -8,6 +8,24 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-  <app-root></app-root>
+  <button id="show-hide">Show/Hide</button>
+  <template>
+    <my-webco></my-webco>
+  </template>
+  <div id="container"></div>
+
+  <script>
+    window.webcoCounter = 0;
+    document.getElementById('show-hide').addEventListener('click', () => {
+      const container = document.getElementById('container');
+      console.log('toggle', container)
+      if (container.children.length > 0) {
+        container.innerHTML = '';
+      } else {
+        const clone = document.importNode(document.getElementsByTagName('template')[0].content, true);
+        container.appendChild(clone);
+      }
+    });
+  </script>
 </body>
 </html>

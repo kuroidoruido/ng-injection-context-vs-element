@@ -1,6 +1,10 @@
-import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
-import { App } from './app/app';
+import { ApplicationRef } from '@angular/core';
+import { createCustomElement } from '@angular/elements';
+import { createApplication } from '@angular/platform-browser';
+import { Webco } from './app/webco';
 
-bootstrapApplication(App, appConfig)
-  .catch((err) => console.error(err));
+(async () => {
+  const app: ApplicationRef = await createApplication({ providers: [] });
+  const element = createCustomElement(Webco, { injector: app.injector });
+  customElements.define('my-webco', element);
+})();
